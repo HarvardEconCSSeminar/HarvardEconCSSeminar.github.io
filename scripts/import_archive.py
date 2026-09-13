@@ -115,6 +115,8 @@ def markdown_record(row: dict[str, object]) -> str:
     frontmatter.append("---")
 
     safe_abstract = html.escape(abstract, quote=False)
+    if not safe_abstract:
+        return "\n".join(frontmatter) + "\n"
     return "\n".join(frontmatter) + "\n\n" + safe_abstract + "\n"
 
 

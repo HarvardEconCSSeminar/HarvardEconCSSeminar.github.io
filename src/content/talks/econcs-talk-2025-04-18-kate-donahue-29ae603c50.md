@@ -13,5 +13,3 @@ location: "SEC LL 2.221"
 format: "in-person"
 legacyEventId: "econcs-event-2025-04-18"
 ---
-
-

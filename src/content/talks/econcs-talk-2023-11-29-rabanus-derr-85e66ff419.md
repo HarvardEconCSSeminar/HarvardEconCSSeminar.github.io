@@ -13,5 +13,3 @@ location: "SEC 5.403"
 format: "in-person"
 legacyEventId: "econcs-event-2023-11-29"
 ---
-
-
