@@ -1,0 +1,35 @@
+---
+import type { Talk } from "@/lib/talks";
+import { formatLongDate, talkTitle } from "@/lib/talks";
+
+interface Props {
+  talk: Talk;
+  homepageTalk?: boolean;
+  hidden?: boolean;
+}
+
+const { talk, homepageTalk = false, hidden = false } = Astro.props;
+---
+
+<article
+  class:list={["talk-card", { "homepage-talk": homepageTalk, "is-draft": talk.draft }]}
+  data-start={talk.start.toUTC().toISO()}
+  data-end={talk.end.toUTC().toISO()}
+  data-term={talk.term}
+  hidden={hidden}
+>
+  <div class="talk-date">
+    <span>{formatLongDate(talk)}</span>
+    <span class="talk-time">{talk.timeLabel}</span>
+  </div>
+  <div class="talk-main">
+    <p class="talk-speaker">{talk.speaker}</p>
+    <p class="talk-affiliation">{talk.affiliation}</p>
+    <h3><a href={talk.path}>{talkTitle(talk)}</a></h3>
+    <div class="talk-meta">
+      <span>{talk.location}</span>
+      <span class="format-label">{talk.format}</span>
+    </div>
+    <a class="detail-link" href={talk.path}>View talk details <span aria-hidden="true">→</span></a>
+  </div>
+</article>

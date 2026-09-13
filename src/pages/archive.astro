@@ -1,0 +1,73 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import TalkCard from "@/components/TalkCard.astro";
+import { getAllTalks, splitTalks } from "@/lib/talks";
+
+const talks = await getAllTalks();
+const { past } = splitTalks(talks);
+const terms = [...new Set(talks.map((talk) => talk.term))].sort((a, b) => {
+  const aLatest = Math.max(...talks.filter((talk) => talk.term === a).map((talk) => talk.start.toMillis()));
+  const bLatest = Math.max(...talks.filter((talk) => talk.term === b).map((talk) => talk.start.toMillis()));
+  return bLatest - aLatest;
+});
+---
+
+<BaseLayout
+  title="Talk archive"
+  description="Past talks from the Harvard EconCS Seminar."
+  canonicalPath="/archive/"
+>
+  <section class="page-hero archive-hero">
+    <div class="shell">
+      <p class="eyebrow">Harvard EconCS Seminar</p>
+      <h1>Talk archive</h1>
+      <p>{past.length} talks spanning economics, computation, and their social applications.</p>
+    </div>
+  </section>
+  <div class="shell archive-layout">
+    <aside class="archive-index" aria-label="Archive terms">
+      <p class="label">Browse by term</p>
+      <nav aria-label="Archive terms">
+        {terms.map((term) => <a href={`#${term.toLowerCase().replaceAll(" ", "-")}`}>{term}</a>)}
+      </nav>
+    </aside>
+    <div class="archive-content">
+      {terms.map((term) => {
+        const termTalks = talks
+          .filter((talk) => talk.term === term)
+          .sort((a, b) => b.start.toMillis() - a.start.toMillis());
+        return (
+          <section
+            class="archive-term"
+            id={term.toLowerCase().replaceAll(" ", "-")}
+            data-archive-term
+            aria-labelledby={`${term.toLowerCase().replaceAll(" ", "-")}-heading`}
+          >
+            <div class="term-heading">
+              <h2 id={`${term.toLowerCase().replaceAll(" ", "-")}-heading`}>{term}</h2>
+              <span data-term-count>{termTalks.filter((talk) => talk.end.toMillis() <= Date.now()).length} talks</span>
+            </div>
+            <div class="archive-list">
+              {termTalks.map((talk) => <TalkCard talk={talk} />)}
+            </div>
+          </section>
+        );
+      })}
+      <p class="empty-state" data-archive-empty hidden={past.length > 0}>Past talks will appear here.</p>
+    </div>
+  </div>
+  <script is:inline>
+    const now = Date.now();
+    let visibleCount = 0;
+    document.querySelectorAll("[data-archive-term]").forEach((section) => {
+      const cards = [...section.querySelectorAll(".talk-card")];
+      const visible = cards.filter((card) => new Date(card.dataset.end).getTime() <= now);
+      cards.forEach((card) => { card.hidden = !visible.includes(card); });
+      section.hidden = visible.length === 0;
+      const label = section.querySelector("[data-term-count]");
+      if (label) label.textContent = `${visible.length} ${visible.length === 1 ? "talk" : "talks"}`;
+      visibleCount += visible.length;
+    });
+    document.querySelector("[data-archive-empty]")?.toggleAttribute("hidden", visibleCount > 0);
+  </script>
+</BaseLayout>

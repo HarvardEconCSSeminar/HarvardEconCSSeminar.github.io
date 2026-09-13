@@ -1,0 +1,16 @@
+{
+  "draft": true,
+  "name": "Harvard EconCS Seminar",
+  "shortName": "EconCS Seminar",
+  "mission": "Draft mission — replace with the seminar’s approved one-sentence mission before launch.",
+  "canonicalUrl": "https://harvardeconcsseminar.github.io",
+  "timezone": "America/New_York",
+  "defaultStartTime": "12:00",
+  "defaultEndTime": "13:00",
+  "fixedTimeLabel": "Current meeting time to be confirmed",
+  "defaultLocation": "Current location to be confirmed",
+  "defaultMapUrl": "",
+  "mailingListUrl": "",
+  "contactEmail": "",
+  "organizers": []
+}

@@ -1,0 +1,99 @@
+---
+import { getCollection, render, type CollectionEntry } from "astro:content";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { absoluteUrl, formatLongDate, resolveTalk, talkTitle } from "@/lib/talks";
+
+export async function getStaticPaths() {
+  const entries = await getCollection("talks");
+  return entries.map((entry) => ({ params: { id: entry.id }, props: { entry } }));
+}
+
+interface Props {
+  entry: CollectionEntry<"talks">;
+}
+
+const { entry } = Astro.props;
+const talk = resolveTalk(entry);
+const { Content } = await render(entry);
+const description = talk.abstract
+  ? talk.abstract.replace(/\s+/g, " ").slice(0, 155)
+  : `${talk.speaker} at the Harvard EconCS Seminar.`;
+const isPast = talk.end.toMillis() <= Date.now();
+const initials = talk.speaker
+  .split(/\s+/)
+  .map((part) => part[0])
+  .slice(0, 2)
+  .join("");
+---
+
+<BaseLayout title={talkTitle(talk)} description={description} canonicalPath={talk.path}>
+  <section class="talk-hero">
+    <div class="shell talk-hero-inner">
+      <a class="back-link" href={isPast ? "/archive/" : "/"}>← {isPast ? "Back to archive" : "Back to schedule"}</a>
+      <p class="eyebrow" data-talk-status data-end={talk.end.toUTC().toISO()}>
+        <span data-status-label>{isPast ? "Past talk" : "Upcoming talk"}</span> · Harvard EconCS Seminar
+      </p>
+      <h1>{talkTitle(talk)}</h1>
+      <p class="talk-hero-speaker">{talk.speaker}</p>
+    </div>
+  </section>
+
+  <article class="shell talk-detail">
+    <div class="speaker-profile">
+      {talk.photo ? (
+        <img src={talk.photo} alt={`Portrait of ${talk.speaker}`} width="160" height="160" />
+      ) : (
+        <div class="speaker-initials" aria-hidden="true">{initials}</div>
+      )}
+      <div>
+        <p class="label">Speaker</p>
+        <h2>{talk.speaker}</h2>
+        <p>{talk.affiliation}</p>
+        {talk.speakerUrl && <a href={talk.speakerUrl}>Speaker homepage <span aria-hidden="true">↗</span></a>}
+      </div>
+    </div>
+
+    <dl class="event-facts">
+      <div>
+        <dt>Date and time</dt>
+        <dd>{formatLongDate(talk)}<br />{talk.timeLabel}</dd>
+      </div>
+      <div>
+        <dt>Location</dt>
+        <dd>
+          {talk.mapUrl ? <a href={talk.mapUrl}>{talk.location}</a> : talk.location}
+          <span class="fact-note">{talk.format}</span>
+        </dd>
+      </div>
+    </dl>
+
+    <div class="detail-actions">
+      <a class="button" href={`${talk.path}event.ics`} download>Add to calendar (.ics)</a>
+      {talk.links.map((link) => <a class="button button-secondary" href={link.url}>{link.label}</a>)}
+    </div>
+
+    <div class="abstract-grid">
+      <div>
+        <p class="label">About the talk</p>
+        <h2>Abstract</h2>
+      </div>
+      <div class="prose">
+        {talk.abstractForthcoming && !talk.abstract ? <p>Abstract forthcoming.</p> : <Content />}
+        {talk.coauthors && <p class="coauthors"><strong>Coauthors:</strong> {talk.coauthors}</p>}
+      </div>
+    </div>
+
+    <div class="detail-footer-nav">
+      <a href={isPast ? "/archive/" : "/"}>← {isPast ? "All past talks" : "Full schedule"}</a>
+      <a href={absoluteUrl(`${talk.path}event.ics`)}>Calendar file ↗</a>
+    </div>
+  </article>
+  <script is:inline>
+    const status = document.querySelector("[data-talk-status]");
+    if (status) {
+      const past = new Date(status.dataset.end).getTime() <= Date.now();
+      const label = status.querySelector("[data-status-label]");
+      if (label) label.textContent = past ? "Past talk" : "Upcoming talk";
+    }
+  </script>
+</BaseLayout>

@@ -1,0 +1,175 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import TalkCard from "@/components/TalkCard.astro";
+import { siteSettings } from "@/data/site";
+import { getAllTalks, splitTalks } from "@/lib/talks";
+
+const talks = await getAllTalks();
+const split = splitTalks(talks);
+const featured = split.next;
+const upcoming = split.upcoming;
+const past = split.past;
+const calendarUrl = new URL("/calendar.ics", siteSettings.canonicalUrl).toString();
+const webcalUrl = calendarUrl.replace(/^https?:/, "webcal:");
+---
+
+<BaseLayout>
+  <section class="hero">
+    <div class="shell hero-inner">
+      <p class="eyebrow">Economics × Computer Science</p>
+      <h1>{siteSettings.name}</h1>
+      <p class="hero-mission">{siteSettings.mission}</p>
+    </div>
+  </section>
+
+  <section class="shell fixed-details" aria-labelledby="meeting-heading">
+    <div>
+      <p class="label" id="meeting-heading">Regular meeting</p>
+      <p>{siteSettings.fixedTimeLabel}</p>
+    </div>
+    <div>
+      <p class="label">Location</p>
+      {siteSettings.defaultMapUrl ? (
+        <a href={siteSettings.defaultMapUrl}>{siteSettings.defaultLocation}</a>
+      ) : (
+        <p>{siteSettings.defaultLocation}</p>
+      )}
+    </div>
+  </section>
+
+  <section class="section shell" aria-labelledby="next-heading">
+    <div class="section-heading">
+      <p class="eyebrow">On the horizon</p>
+      <h2 id="next-heading">Next talk</h2>
+    </div>
+    <div class="next-talk-slot" id="next-talk-slot">
+      {featured && <TalkCard talk={featured} homepageTalk />}
+    </div>
+    <p class="empty-state" data-empty-next hidden={Boolean(featured)}>
+      The next talk will be announced soon.
+    </p>
+  </section>
+
+  <section class="section shell" aria-labelledby="upcoming-heading">
+    <div class="section-heading heading-row">
+      <div>
+        <p class="eyebrow">Plan ahead</p>
+        <h2 id="upcoming-heading">Upcoming schedule</h2>
+      </div>
+      <a class="text-link" href={calendarUrl}>Subscribe to the calendar <span aria-hidden="true">↗</span></a>
+    </div>
+    <div class="schedule-list" id="upcoming-talk-slot">
+      {upcoming.map((talk) => <TalkCard talk={talk} homepageTalk />)}
+    </div>
+    <p class="empty-state" data-empty-upcoming hidden={upcoming.length > 0}>
+      Additional dates will appear here as they are confirmed.
+    </p>
+  </section>
+
+  <section class="section subscription-section" aria-labelledby="subscriptions-heading">
+    <div class="shell">
+      <div class="section-heading">
+        <p class="eyebrow">Stay connected</p>
+        <h2 id="subscriptions-heading">Calendar and announcements</h2>
+      </div>
+      <div class="subscription-grid">
+        <article class="subscription-card calendar-card">
+          <p class="card-kicker">Calendar</p>
+          <h3>Keep every talk in view</h3>
+          <p>Subscribe for automatic updates, or download a current calendar snapshot.</p>
+          <div class="button-row">
+            <a class="button" href={webcalUrl}>Subscribe</a>
+            <a class="button button-secondary" href="/calendar.ics" download>Download .ics</a>
+          </div>
+          <button class="copy-link" type="button" data-copy-calendar={calendarUrl}>Copy calendar URL</button>
+        </article>
+        <article class="subscription-card mailing-card">
+          <p class="card-kicker">Mailing list</p>
+          <h3>Get seminar announcements</h3>
+          <p>Receive speaker announcements, room updates, and weekly reminders.</p>
+          {siteSettings.mailingListUrl ? (
+            <a class="button" href={siteSettings.mailingListUrl}>Join the mailing list</a>
+          ) : (
+            <span class="button button-disabled" aria-disabled="true">Link forthcoming</span>
+          )}
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section shell" aria-labelledby="organizers-heading">
+    <div class="section-heading">
+      <p class="eyebrow">People</p>
+      <h2 id="organizers-heading">Organizers and contact</h2>
+    </div>
+    {siteSettings.organizers.length > 0 ? (
+      <div class="organizer-grid">
+        {siteSettings.organizers.map((organizer) => (
+          <article class="organizer-card">
+            <h3>{organizer.name}</h3>
+            {organizer.role && <p>{organizer.role}</p>}
+            {organizer.email && <a href={`mailto:${organizer.email}`}>{organizer.email}</a>}
+          </article>
+        ))}
+      </div>
+    ) : (
+      <p class="empty-state">Organizer and contact information will be added before launch.</p>
+    )}
+    {siteSettings.contactEmail && (
+      <p class="contact-line">General questions: <a href={`mailto:${siteSettings.contactEmail}`}>{siteSettings.contactEmail}</a></p>
+    )}
+  </section>
+
+  <section class="section shell recent-section" aria-labelledby="recent-heading">
+    <div class="section-heading heading-row">
+      <div>
+        <p class="eyebrow">From the archive</p>
+        <h2 id="recent-heading">Recent talks</h2>
+      </div>
+      <a class="text-link" href="/archive/">Browse the complete archive <span aria-hidden="true">→</span></a>
+    </div>
+    <div class="schedule-list" id="past-talk-slot">
+      {past.map((talk, index) => <TalkCard talk={talk} homepageTalk hidden={index >= 3} />)}
+    </div>
+    <p class="empty-state" data-empty-past hidden={past.length > 0}>Past talks will appear here.</p>
+  </section>
+
+  <script is:inline>
+    const talkNodes = [...document.querySelectorAll(".homepage-talk")];
+    const nextSlot = document.querySelector("#next-talk-slot");
+    const upcomingSlot = document.querySelector("#upcoming-talk-slot");
+    const pastSlot = document.querySelector("#past-talk-slot");
+    const now = Date.now();
+    const byStart = (a, b) => new Date(a.dataset.start).getTime() - new Date(b.dataset.start).getTime();
+    const future = talkNodes.filter((node) => new Date(node.dataset.end).getTime() > now).sort(byStart);
+    const ended = talkNodes.filter((node) => new Date(node.dataset.end).getTime() <= now).sort((a, b) => byStart(b, a));
+
+    talkNodes.forEach((node) => { node.hidden = true; });
+    if (future[0]) {
+      future[0].hidden = false;
+      nextSlot?.append(future[0]);
+    }
+    future.slice(1).forEach((node) => {
+      node.hidden = false;
+      upcomingSlot?.append(node);
+    });
+    ended.forEach((node, index) => {
+      node.hidden = index >= 3;
+      pastSlot?.append(node);
+    });
+
+    document.querySelector("[data-empty-next]")?.toggleAttribute("hidden", future.length > 0);
+    document.querySelector("[data-empty-upcoming]")?.toggleAttribute("hidden", future.length > 1);
+    document.querySelector("[data-empty-past]")?.toggleAttribute("hidden", ended.length > 0);
+
+    document.querySelector("[data-copy-calendar]")?.addEventListener("click", async (event) => {
+      const button = event.currentTarget;
+      try {
+        await navigator.clipboard.writeText(button.dataset.copyCalendar);
+        button.textContent = "Calendar URL copied";
+      } catch {
+        window.prompt("Copy this calendar URL:", button.dataset.copyCalendar);
+      }
+    });
+  </script>
+</BaseLayout>

@@ -1,0 +1,82 @@
+---
+import "@/styles/global.css";
+import { siteSettings } from "@/data/site";
+
+interface Props {
+  title?: string;
+  description?: string;
+  canonicalPath?: string;
+}
+
+const {
+  title = siteSettings.name,
+  description = siteSettings.mission,
+  canonicalPath = "/",
+} = Astro.props;
+const fullTitle = title === siteSettings.name ? title : `${title} | ${siteSettings.name}`;
+const canonical = new URL(canonicalPath, siteSettings.canonicalUrl).toString();
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#a51c30" />
+    <link rel="canonical" href={canonical} />
+    <title>{fullTitle}</title>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+    {siteSettings.draft && (
+      <div class="draft-banner" role="status">
+        Draft preview — schedule, location, subscriptions, and organizers still need approval.
+      </div>
+    )}
+    <header class="site-header">
+      <div class="shell header-inner">
+        <a class="wordmark" href="/" aria-label={`${siteSettings.name} home`}>
+          <span class="wordmark-harvard">Harvard</span>
+          <span class="wordmark-rule" aria-hidden="true"></span>
+          <span class="wordmark-seminar">EconCS Seminar</span>
+        </a>
+        <nav aria-label="Primary navigation">
+          <a href="/">Schedule</a>
+          <a href="/archive/">Archive</a>
+          <a href="/calendar.ics">Calendar</a>
+        </nav>
+      </div>
+    </header>
+    <main id="main-content">
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <div class="shell footer-inner">
+        <div>
+          <p class="footer-title">{siteSettings.name}</p>
+          <p>A seminar at Harvard University.</p>
+        </div>
+        <div class="footer-links">
+          <a href="/archive/">Past talks</a>
+          <a href="/calendar.ics">Calendar feed</a>
+          {siteSettings.contactEmail && <a href={`mailto:${siteSettings.contactEmail}`}>Contact</a>}
+        </div>
+        <p class="footer-note">© <span data-current-year></span> Harvard EconCS Seminar</p>
+      </div>
+    </footer>
+    <script is:inline>
+      document.querySelectorAll("[data-current-year]").forEach((node) => {
+        node.textContent = String(new Date().getFullYear());
+      });
+    </script>
+  </body>
+</html>
