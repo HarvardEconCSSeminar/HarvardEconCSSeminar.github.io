@@ -30,7 +30,6 @@ img { max-width: 100%; height: auto; }
 .talk-card, .talk-main, .section-heading > * { min-width: 0; }
 .skip-link { position: fixed; top: 8px; left: 8px; z-index: 100; transform: translateY(-150%); background: var(--white); color: var(--ink); padding: 10px 14px; border: 2px solid var(--ink); }
 .skip-link:focus { transform: translateY(0); }
-.draft-banner { padding: 4px 16px; background: #f7f1d9; border-bottom: 1px solid #e4dba9; color: #50471f; text-align: center; font-size: 0.72rem; font-weight: 750; letter-spacing: 0.025em; }
 .site-header { background: var(--white); border-bottom: 1px solid var(--line); }
 .header-inner { min-height: 90px; display: flex; align-items: center; justify-content: space-between; gap: 30px; }
 .wordmark { display: inline-flex; align-items: center; gap: 15px; color: var(--ink); text-decoration: none; letter-spacing: -0.02em; }

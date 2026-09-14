@@ -6,8 +6,6 @@ test("homepage preserves the requested section order and keyboard entry point", 
   await expect(page.getByRole("heading", { level: 1, name: "Harvard Econ CS Seminar" })).toBeVisible();
   await expect(page.getByText("Fridays, 1:00–2:00 PM · SEC 1.413", { exact: true })).toBeVisible();
   await expect(page.getByRole("navigation", { name: "Primary navigation" }).getByText("Calendar")).toHaveCount(0);
-  await expect(page.getByText("Draft preview", { exact: false })).toBeVisible();
-
   const headings = await page.locator("main section h2").allTextContents();
   expect(headings).toEqual([
     "Next talk",
