@@ -17,7 +17,7 @@ const talk = resolveTalk(entry);
 const { Content } = await render(entry);
 const description = talk.abstract
   ? talk.abstract.replace(/\s+/g, " ").slice(0, 155)
-  : `${talk.speaker} at the Harvard EconCS Seminar.`;
+  : `${talk.speaker} at the Harvard Econ CS Seminar.`;
 const isPast = talk.end.toMillis() <= Date.now();
 const initials = talk.speaker
   .split(/\s+/)
@@ -31,7 +31,7 @@ const initials = talk.speaker
     <div class="shell talk-hero-inner">
       <a class="back-link" href={isPast ? "/archive/" : "/"}>← {isPast ? "Back to archive" : "Back to schedule"}</a>
       <p class="eyebrow" data-talk-status data-end={talk.end.toUTC().toISO()}>
-        <span data-status-label>{isPast ? "Past talk" : "Upcoming talk"}</span> · Harvard EconCS Seminar
+        <span data-status-label>{isPast ? "Past talk" : "Upcoming talk"}</span> · Harvard Econ CS Seminar
       </p>
       <h1>{talkTitle(talk)}</h1>
       <p class="talk-hero-speaker">{talk.speaker}</p>

@@ -52,10 +52,6 @@ h1 { max-width: 850px; margin-bottom: 18px; font-size: clamp(2.8rem, 5.4vw, 4.8r
 h2 { margin-bottom: 0; font-size: clamp(1.85rem, 3.2vw, 2.7rem); font-weight: 760; }
 h3 { font-size: 1.25rem; }
 .hero-mission { max-width: 760px; margin-bottom: 0; color: #e6e7ee; font-size: clamp(1.15rem, 2.2vw, 1.55rem); line-height: 1.5; }
-.fixed-details { position: relative; z-index: 2; display: grid; grid-template-columns: 1fr 1fr; margin-top: -34px; padding: 28px 36px; background: var(--white); border-top: 5px solid var(--crimson); box-shadow: var(--shadow); }
-.fixed-details > div + div { padding-left: 36px; border-left: 1px solid var(--line); }
-.fixed-details p { margin-bottom: 0; font-size: 1.12rem; font-weight: 650; }
-.fixed-details .label { margin-bottom: 6px; color: var(--muted); font-size: 0.72rem; }
 .section { padding-block: 82px; }
 .section + .section { border-top: 1px solid var(--line); }
 .section-heading { margin-bottom: 38px; }
@@ -175,9 +171,7 @@ h3 { font-size: 1.25rem; }
   nav { gap: 16px; }
   nav a { font-size: .86rem; }
   .hero-inner { padding-block: 64px 76px; }
-  .fixed-details, .next-talk-slot .talk-card, .schedule-list .talk-card, .subscription-grid { grid-template-columns: 1fr; }
-  .fixed-details { padding: 24px; }
-  .fixed-details > div + div { margin-top: 20px; padding: 20px 0 0; border: 0; border-top: 1px solid var(--line); }
+  .next-talk-slot .talk-card, .schedule-list .talk-card, .subscription-grid { grid-template-columns: 1fr; }
   .section { padding-block: 68px; }
   .heading-row { align-items: start; flex-direction: column; }
   .talk-date, .schedule-list .talk-date { padding: 22px 24px; }

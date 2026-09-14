@@ -1,6 +1,6 @@
-# Harvard EconCS Seminar website
+# Harvard Econ CS Seminar website
 
-Static Astro site for the Harvard EconCS Seminar. Each talk has one Markdown source record that generates its permanent detail page, archive/homepage placement, the site calendar feed, and an individual `.ics` file.
+Static Astro site for the Harvard Econ CS Seminar. Each talk has one Markdown source record that generates its permanent detail page, archive/homepage placement, the site calendar feed, and an individual `.ics` file.
 
 The site is intentionally in **draft mode**. Deployment will fail until the current mission, meeting details, subscription links, shared contact, organizers, and at least one real talk have been approved.
 
@@ -15,7 +15,7 @@ Edit [`src/data/site.json`](src/data/site.json). It contains the mission, recurr
 1. Copy [`src/content/talks/_template.md`](src/content/talks/_template.md).
 2. Rename the copy to a permanent, lowercase slug such as `2026-10-02-jane-doe.md`. Never rename it after publication: the filename is the permanent URL and calendar UID.
 3. Fill in the frontmatter and abstract. Keep `draft: true` until the record is approved, then remove the field or set it to `false`.
-4. Open a pull request. The validation workflow checks launch readiness, schema, times, URLs, generated routes, calendar files, responsive behavior, and accessibility. Keep a draft on its branch until it is ready to merge.
+4. Open a pull request. The validation workflow checks schema, times, URLs, generated routes, calendar files, responsive behavior, and accessibility. Keep a draft on its branch until it is ready to merge.
 
 Required fields are speaker, affiliation, date, and either a title or `titleForthcoming: true`. Put the abstract in the Markdown body or set `abstractForthcoming: true`. Optional fields include time/location overrides, speaker homepage, a permitted local photo, map, coauthors, and labeled links for papers, slides, video, or code.
 

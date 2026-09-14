@@ -34,6 +34,3 @@ jobs:
 
       - name: Run browser tests
         run: pnpm test:e2e
-
-      - name: Enforce launch-ready content
-        run: pnpm validate:launch

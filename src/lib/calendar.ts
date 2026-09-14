@@ -62,7 +62,7 @@ export function createCalendar(talks: Talk[], generatedAt: DateTime = DateTime.u
   const lines = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    "PRODID:-//Harvard EconCS Seminar//Calendar//EN",
+    "PRODID:-//Harvard Econ CS Seminar//Calendar//EN",
     "CALSCALE:GREGORIAN",
     "METHOD:PUBLISH",
     `X-WR-CALNAME:${escapeIcs(siteSettings.name)}`,
