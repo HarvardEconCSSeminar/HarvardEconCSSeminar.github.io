@@ -10,9 +10,9 @@ test("homepage preserves the requested section order and keyboard entry point", 
   expect(headings).toEqual([
     "Next talk",
     "Upcoming schedule",
+    "Recent talks",
     "Calendar and announcements",
     "Organizers and contact",
-    "Recent talks",
   ]);
 
   await page.keyboard.press("Tab");
