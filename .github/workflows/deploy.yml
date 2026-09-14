@@ -4,6 +4,12 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+    inputs:
+      draft_preview:
+        description: Publish the visibly marked draft for organizer review
+        required: true
+        default: false
+        type: boolean
   schedule:
     - cron: "17 4 * * *"
       timezone: "America/New_York"
@@ -29,7 +35,10 @@ jobs:
         with:
           node-version: 24
           package-manager: pnpm@11.19.0
-          build-cmd: pnpm run validate:launch && pnpm run test && pnpm run build
+          build-cmd: >-
+            ${{ github.event_name == 'workflow_dispatch' && inputs.draft_preview == true
+              && 'pnpm run test && pnpm run build'
+              || 'pnpm run validate:launch && pnpm run test && pnpm run build' }}
 
   deploy:
     needs: build
