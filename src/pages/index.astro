@@ -16,30 +16,13 @@ const webcalUrl = calendarUrl.replace(/^https?:/, "webcal:");
 <BaseLayout>
   <section class="hero">
     <div class="shell hero-inner">
-      <p class="eyebrow">Economics × Computer Science</p>
       <h1>{siteSettings.name}</h1>
       <p class="hero-mission">{siteSettings.mission}</p>
     </div>
   </section>
 
-  <section class="shell fixed-details" aria-labelledby="meeting-heading">
-    <div>
-      <p class="label" id="meeting-heading">Regular meeting</p>
-      <p>{siteSettings.fixedTimeLabel}</p>
-    </div>
-    <div>
-      <p class="label">Location</p>
-      {siteSettings.defaultMapUrl ? (
-        <a href={siteSettings.defaultMapUrl}>{siteSettings.defaultLocation}</a>
-      ) : (
-        <p>{siteSettings.defaultLocation}</p>
-      )}
-    </div>
-  </section>
-
   <section class="section shell" aria-labelledby="next-heading">
     <div class="section-heading">
-      <p class="eyebrow">On the horizon</p>
       <h2 id="next-heading">Next talk</h2>
     </div>
     <div class="next-talk-slot" id="next-talk-slot">
@@ -53,7 +36,6 @@ const webcalUrl = calendarUrl.replace(/^https?:/, "webcal:");
   <section class="section shell" aria-labelledby="upcoming-heading">
     <div class="section-heading heading-row">
       <div>
-        <p class="eyebrow">Plan ahead</p>
         <h2 id="upcoming-heading">Upcoming schedule</h2>
       </div>
       <a class="text-link" href={calendarUrl}>Subscribe to the calendar <span aria-hidden="true">↗</span></a>
