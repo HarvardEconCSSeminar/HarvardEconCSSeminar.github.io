@@ -37,11 +37,6 @@ const canonical = new URL(canonicalPath, siteSettings.canonicalUrl).toString();
   </head>
   <body>
     <a class="skip-link" href="#main-content">Skip to main content</a>
-    {siteSettings.draft && (
-      <div class="draft-banner" role="status">
-        Draft preview <span aria-hidden="true">·</span> details pending
-      </div>
-    )}
     <header class="site-header">
       <div class="shell header-inner">
         <a class="wordmark" href="/" aria-label={`${siteSettings.name} home`}>
