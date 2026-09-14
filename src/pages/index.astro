@@ -103,7 +103,10 @@ const webcalUrl = calendarUrl.replace(/^https?:/, "webcal:");
           <article class="organizer-card">
             <h3>{organizer.name}</h3>
             {organizer.role && <p>{organizer.role}</p>}
-            {organizer.email && <a href={`mailto:${organizer.email}`}>{organizer.email}</a>}
+            <div class="organizer-links">
+              {organizer.email && <a href={`mailto:${organizer.email}`}>{organizer.email}</a>}
+              {organizer.url && <a href={organizer.url} aria-label={`${organizer.name} personal website`}>Personal website <span aria-hidden="true">↗</span></a>}
+            </div>
           </article>
         ))}
       </div>
