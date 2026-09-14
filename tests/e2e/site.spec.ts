@@ -14,6 +14,16 @@ test("homepage preserves the requested section order and keyboard entry point", 
     "Calendar and announcements",
     "Organizers and contact",
   ]);
+  await expect(page.getByRole("heading", { level: 3, name: "Michelle Si" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Michelle Si personal website" })).toHaveAttribute(
+    "href",
+    "https://sites.google.com/g.harvard.edu/msi/",
+  );
+  await expect(page.getByRole("heading", { level: 3, name: "Shi Feng" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Shi Feng personal website" })).toHaveAttribute(
+    "href",
+    "https://fengshi.link/",
+  );
 
   await page.keyboard.press("Tab");
   await expect(page.getByRole("link", { name: "Skip to main content" })).toBeFocused();

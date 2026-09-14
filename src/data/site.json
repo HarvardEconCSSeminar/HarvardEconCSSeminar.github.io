@@ -12,5 +12,18 @@
   "defaultMapUrl": "",
   "mailingListUrl": "",
   "contactEmail": "",
-  "organizers": []
+  "organizers": [
+    {
+      "name": "Michelle Si",
+      "role": "2026–27 organizer · Harvard CS PhD student",
+      "email": "msi@g.harvard.edu",
+      "url": "https://sites.google.com/g.harvard.edu/msi/"
+    },
+    {
+      "name": "Shi Feng",
+      "role": "2026–27 organizer · Harvard CS PhD student",
+      "email": "shifeng@fas.harvard.edu",
+      "url": "https://fengshi.link/"
+    }
+  ]
 }
